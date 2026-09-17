@@ -259,6 +259,9 @@ textarea#textInput::placeholder { color: var(--muted); }
   display: flex;
   align-items: baseline;
   justify-content: center;
+  /* baseline alignment packs the number pair against the top of the circle;
+     this padding vertically centers the 40px score in the 96px stamp */
+  padding-top: 25px;
   transform: rotate(-8deg);
 }
 
