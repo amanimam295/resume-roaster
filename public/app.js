@@ -121,8 +121,22 @@ async function submitRoast() {
       });
     }
 
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.error || 'The roast fizzled out. Try again.');
+    // Guard against HTML error pages (Express 404s, Render 502s during cold
+    // starts/redeploys): response.json() would throw a cryptic
+    // "Unexpected token '<'" — parse defensively and show a friendly error.
+    const raw = await response.text();
+    let data = null;
+    try {
+      data = raw ? JSON.parse(raw) : null;
+    } catch {
+      data = null;
+    }
+    if (!response.ok) {
+      throw new Error((data && data.error) || 'The roast fizzled out. Try again.');
+    }
+    if (!data) {
+      throw new Error('The roast fizzled out. Try again.');
+    }
 
     renderResults(data);
   } catch (err) {
