@@ -178,6 +178,12 @@ resume-roaster/
 
 ---
 
+## 🌐 Live
+
+- **Frontend:** [tryresumeroaster.vercel.app](https://tryresumeroaster.vercel.app) (Vercel, auto-deploys from `main`)
+- **API:** [resume-roaster-zyu8.onrender.com](https://resume-roaster-zyu8.onrender.com) (Render free tier — first roast after idle may take ~50s to wake the server)
+- Health check: [`/api/health`](https://resume-roaster-zyu8.onrender.com/api/health)
+
 ## 💡 Ideas for the Future
 
 - 🖼️ "Share my roast" image export
