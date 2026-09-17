@@ -112,9 +112,9 @@ async function submitRoast() {
     if (selectedFile) {
       const formData = new FormData();
       formData.append('resume', selectedFile);
-      response = await fetch('/api/roast', { method: 'POST', body: formData });
+      response = await fetch(`${API_BASE_URL}/api/roast`, { method: 'POST', body: formData });
     } else {
-      response = await fetch('/api/roast', {
+      response = await fetch(`${API_BASE_URL}/api/roast`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: textInput.value }),

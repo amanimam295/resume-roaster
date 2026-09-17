@@ -97,8 +97,26 @@ npm run dev
 | ------------------- | -------- | ------- | ---------------------------- |
 | `GEMINI_API_KEY` | ✅ yes   | —       | Your Google Gemini API key   |
 | `PORT`              | no       | `3000`  | Port the server listens on   |
+| `ALLOWED_ORIGIN`    | no       | *(all)* | Comma-separated origins allowed to call the API (CORS). Set to your frontend's URL when frontend and backend are hosted separately. |
 
 > ⚠️ Without `GEMINI_API_KEY` the server still boots (and the UI loads fine), but `/api/roast` returns a clear error message.
+
+### Deployment
+
+**Same-origin (default):** deploy once to Render as a Web Service (`npm install` + `npm start`) — it serves both the UI and the API.
+
+**Split deployment (frontend and backend separate):**
+
+1. **Backend** → Render **Web Service** as above. Add env vars: `GEMINI_API_KEY` and (recommended) `ALLOWED_ORIGIN=https://your-frontend.onrender.com`.
+2. **Frontend** → Render **Static Site** (or any static host) with **Publish Directory** `public`. Add an env var `API_BASE_URL = https://your-api.onrender.com` — the build command below generates the override automatically:
+
+   ```bash
+   echo "window.API_BASE_URL_OVERRIDE='$API_BASE_URL';" > public/env.js
+   ```
+
+   Alternatively, edit `public/config.js` and hard-code the API origin instead of using `API_BASE_URL`.
+
+The API allows all origins by default; set `ALLOWED_ORIGIN` in production to stop other sites from spending your Gemini quota.
 
 ---
 
@@ -139,10 +157,12 @@ npm run dev
 resume-roaster/
 ├── server.js          # Express app, /api/roast route, prompt + Gemini call
 ├── package.json
-├── .env.example       # Template for GEMINI_API_KEY / PORT
-└── public/            # Frontend (served statically)
+├── .env.example       # Template for GEMINI_API_KEY / PORT / ALLOWED_ORIGIN
+└── public/            # Frontend (served statically or deployable on its own)
     ├── index.html     # Single-page UI: hero, dropzone, results
     ├── style.css      # Stage-light "comedy club" theme
+    ├── config.js      # API base URL config ("" = same origin as the backend)
+    ├── env.js         # Optional per-deploy override (generated on some hosts)
     └── app.js         # File drop/paste handling, fetch, rendering
 ```
 

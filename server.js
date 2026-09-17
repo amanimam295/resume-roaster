@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const multer = require('multer');
 const pdfParse = require('pdf-parse');
 
@@ -9,6 +10,14 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const MODEL = 'gemini-3.6-flash';
 
 app.use(express.json({ limit: '2mb' }));
+// Allow browser clients on other origins (e.g. a separately-hosted frontend) to call this API.
+// Set ALLOWED_ORIGIN (comma-separated) to restrict which sites may call the API;
+// leave unset to allow all origins (fine for demos, risky for your Gemini quota otherwise).
+const allowedOrigins = (process.env.ALLOWED_ORIGIN || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
+app.use(cors(allowedOrigins.length ? { origin: allowedOrigins } : {}));
 app.use(express.static('public'));
 
 const upload = multer({
