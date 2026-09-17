@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume Roaster</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="stage">
+    <div class="stage__grain"></div>
+    <header class="hero">
+      <p class="hero__kicker">a resume has one job. most fail it.</p>
+      <h1 class="hero__title">Bring your résumé.<br>Leave with your ego intact.<br><span class="hero__title--maybe">Maybe.</span></h1>
+      <p class="hero__sub">Paste it in, drop the file in, and an AI critic tears it apart line by line — then tells you exactly how to fix it.</p>
+    </header>
+
+    <main class="mic">
+      <div class="spotlight" id="dropzone">
+        <div class="spotlight__ring"></div>
+        <div class="spotlight__content" id="spotlightContent">
+          <p class="spotlight__label">Drop your resume here</p>
+          <p class="spotlight__or">or</p>
+          <button class="btn btn--ghost" id="browseBtn" type="button">choose a file</button>
+          <input type="file" id="fileInput" accept=".pdf,.txt" hidden>
+          <p class="spotlight__hint">PDF or .txt, under 5MB</p>
+        </div>
+      </div>
+
+      <div class="paste">
+        <p class="paste__divider"><span>or paste the text instead</span></p>
+        <textarea id="textInput" placeholder="Paste your resume text here..." rows="8"></textarea>
+      </div>
+
+      <div class="filepill" id="filePill" hidden>
+        <span id="fileName"></span>
+        <button type="button" id="clearFile" aria-label="Remove file">clear</button>
+      </div>
+
+      <button class="btn btn--go" id="roastBtn" type="button">
+        <span id="roastBtnLabel">Roast me</span>
+      </button>
+
+      <p class="error" id="errorMsg" hidden></p>
+    </main>
+
+    <section class="results" id="results" hidden>
+
+      <div class="verdict">
+        <div class="stamp">
+          <span class="stamp__score" id="scoreValue">--</span>
+          <span class="stamp__of">/100</span>
+        </div>
+        <h2 class="verdict__headline" id="headline"></h2>
+      </div>
+
+      <div class="cuecards" id="roastPoints"></div>
+
+      <div class="backstage">
+        <p class="backstage__label">real talk</p>
+        <p class="backstage__text" id="realTalk"></p>
+      </div>
+
+      <div class="rewrite">
+        <p class="rewrite__label">how to actually fix it</p>
+        <ul class="rewrite__list" id="rewriteList"></ul>
+      </div>
+
+      <button class="btn btn--ghost" id="againBtn" type="button">roast another one</button>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
