@@ -86,7 +86,11 @@ async function callGemini(resumeText) {
       ],
       generationConfig: {
         responseMimeType: 'application/json',
-        // thinking tokens count against this budget on Gemini 3.x, so keep it generous
+        // Gemini 3.x spends hidden "thinking" tokens from the maxOutputTokens
+        // budget; on long resumes they can spike and truncate the JSON
+        // mid-stream. Capping thinking bounds the total and roughly halves
+        // response time.
+        thinkingConfig: { thinkingBudget: 512 },
         maxOutputTokens: 8192,
       },
     }),
