@@ -11,6 +11,7 @@ const roastBtnLabel = document.getElementById('roastBtnLabel');
 const errorMsg = document.getElementById('errorMsg');
 const results = document.getElementById('results');
 const scoreValue = document.getElementById('scoreValue');
+const scoreRing = document.getElementById('scoreRing');
 const headline = document.getElementById('headline');
 const roastPoints = document.getElementById('roastPoints');
 const realTalk = document.getElementById('realTalk');
@@ -151,8 +152,38 @@ roastBtn.addEventListener('click', submitRoast);
 
 // --- Render -----------------------------------------------------------
 
+const RING_CIRCUMFERENCE = 283; // stroke-dasharray set in CSS for r=45
+
+function animateScore(score) {
+  // restart the ring transition on repeat roasts
+  scoreRing.style.transition = 'none';
+  scoreRing.style.strokeDashoffset = RING_CIRCUMFERENCE;
+  void scoreRing.getBoundingClientRect();
+  scoreRing.style.transition = '';
+
+  const clamped = Math.max(0, Math.min(100, Number(score) || 0));
+  scoreRing.style.strokeDashoffset = RING_CIRCUMFERENCE * (1 - clamped / 100);
+
+  const duration = 1200; // keep in sync with the CSS transition
+  const start = performance.now();
+  const from = 0;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) {
+    scoreValue.textContent = String(score);
+    return;
+  }
+
+  function tick(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3); // matches the ring's ease-out curve
+    scoreValue.textContent = Math.round(from + (clamped - from) * eased);
+    if (t < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
 function renderResults(data) {
-  scoreValue.textContent = data.score ?? '--';
+  animateScore(data.score);
   headline.textContent = data.headline || '';
 
   roastPoints.innerHTML = '';
